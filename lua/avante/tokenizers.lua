@@ -5,6 +5,9 @@ local Utils = require("avante.utils")
 ---@field encode fun(string): integer[]
 local tokenizers = nil
 
+---@type "gpt-4o" | string
+local current_model = "gpt-4o"
+
 local M = {}
 
 ---@param model "gpt-4o" | string
@@ -28,6 +31,7 @@ end
 ---@param model "gpt-4o" | string
 ---@param warning? boolean
 M.setup = function(model, warning)
+  current_model = model
   warning = warning or true
   vim.defer_fn(function()
     M._init_tokenizers_lib(model)
@@ -44,7 +48,7 @@ M.setup = function(model, warning)
   end
 end
 
-M.available = function() return tokenizers ~= nil end
+M.available = function() return M._init_tokenizers_lib(current_model) ~= nil end
 
 ---@param prompt string
 M.encode = function(prompt)

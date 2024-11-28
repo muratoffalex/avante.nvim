@@ -61,8 +61,8 @@ function RepoMap._build_repo_map(project_root, file_ext)
   local filepaths = Utils.scan_directory(project_root, ignore_patterns, negate_patterns)
   vim.iter(filepaths):each(function(filepath)
     if not Utils.is_same_file_ext(file_ext, filepath) then return end
-    if not repo_map_lib then
-      Utils.error("Failed to load avante_repo_map")
+    local lib = RepoMap._init_repo_map_lib()
+    if not lib then
       return
     end
     local filetype = RepoMap.get_ts_lang(filepath)
